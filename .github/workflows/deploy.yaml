@@ -20,9 +20,11 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+        working-directory: ./app
 
       - name: Build
         run: npm run build
+        working-directory: ./app
 
       - name: Deploy to Juno
         uses: junobuild/juno-action@main
