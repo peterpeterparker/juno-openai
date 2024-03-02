@@ -1,0 +1,78 @@
+@use '../mixins/text';
+
+table {
+	width: 100%;
+	overflow: hidden;
+	border-collapse: separate;
+	border-spacing: 0;
+	table-layout: auto;
+
+	@screen lg {
+		table-layout: fixed;
+	}
+}
+
+@layer base {
+	table {
+		th {
+			@apply bg-violet-200;
+		}
+
+		&.secondary {
+			th {
+				@apply bg-orange-200;
+			}
+		}
+	}
+
+	th {
+		@apply font-semibold;
+	}
+
+	th,
+	td {
+		@apply p-5;
+
+		&:not(:has(button)) {
+			@include text.truncate;
+		}
+
+		@apply text-left;
+
+		span,
+		div {
+			@include text.truncate;
+		}
+	}
+
+	td {
+		@apply bg-white;
+	}
+
+	th {
+		@apply border-b-2;
+		@apply border-black;
+	}
+
+	tr:not(:last-of-type) {
+		td {
+			@apply border-b-2;
+			@apply border-black;
+		}
+	}
+}
+
+tr {
+	position: relative;
+}
+
+th,
+td {
+	letter-spacing: -0.32px;
+	height: var(--tr-height);
+
+	&:not(:first-of-type):last-of-type {
+		width: 16%;
+		text-align: right;
+	}
+}

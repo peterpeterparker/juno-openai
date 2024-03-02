@@ -1,0 +1,12 @@
+services:
+  juno-satellite:
+    image: junobuild/satellite:0.0.10
+    ports:
+      - 5987:5987
+    volumes:
+      - juno_draw_1:/juno/.juno
+      - ./juno.dev.config.ts:/juno/juno.dev.config.ts
+      - ./target/deploy:/juno/target/deploy/
+
+volumes:
+  juno_draw_1:

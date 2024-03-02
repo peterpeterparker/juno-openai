@@ -1,0 +1,152 @@
+.tiptap pre {
+	background: #0d0d0d;
+	border-radius: 0.5rem;
+	color: #fff;
+	font-family: monospace;
+	padding: 0.75rem 1rem;
+}
+
+.tiptap *:not(pre) code {
+	background: black;
+	color: white;
+	padding: 0 4px;
+	border-radius: 4px;
+}
+
+.tiptap {
+	h1 {
+		margin: 0 0 2rem;
+	}
+
+	h2,
+	h3,
+	dl,
+	dd,
+	h4,
+	h5,
+	h6 {
+		margin: 0 0 1rem;
+	}
+
+	table,
+	blockquote,
+	hr,
+	figure,
+	p,
+	pre {
+		margin: 0 0 2rem;
+	}
+
+	a {
+		text-decoration: underline;
+	}
+
+	ul,
+	ol {
+		padding: 0 1rem;
+		margin: 0 0 2rem;
+	}
+
+	ul {
+		list-style-type: disc;
+	}
+
+	ol {
+		list-style-type: decimal;
+	}
+
+	hr {
+		margin: 1.5rem 0;
+		border-color: black;
+		border-width: 1px;
+	}
+}
+
+@layer base {
+	.tiptap {
+		pre {
+			font-family: 'JetBrains Mono', monospace;
+
+			code {
+				color: inherit;
+				padding: 0;
+				background: none;
+			}
+
+			.hljs-comment,
+			.hljs-quote {
+				@apply text-gray-600;
+			}
+
+			.hljs-variable,
+			.hljs-template-variable,
+			.hljs-attribute,
+			.hljs-tag,
+			.hljs-name,
+			.hljs-regexp,
+			.hljs-link,
+			.hljs-name,
+			.hljs-selector-id,
+			.hljs-selector-class {
+				@apply text-red-300;
+			}
+
+			.hljs-number,
+			.hljs-meta,
+			.hljs-built_in,
+			.hljs-builtin-name,
+			.hljs-literal,
+			.hljs-type,
+			.hljs-params {
+				@apply text-orange-200;
+			}
+
+			.hljs-string,
+			.hljs-symbol,
+			.hljs-bullet {
+				@apply text-lime-200;
+			}
+
+			.hljs-title,
+			.hljs-section {
+				@apply text-yellow-200;
+			}
+
+			.hljs-keyword,
+			.hljs-selector-tag {
+				@apply text-cyan-200;
+			}
+
+			.hljs-emphasis {
+				font-style: italic;
+			}
+
+			.hljs-strong {
+				font-weight: 700;
+			}
+		}
+
+		table {
+			@screen lg {
+				table-layout: auto;
+			}
+
+			th {
+				@apply bg-orange-200;
+			}
+
+			th,
+			td {
+				@apply p-2;
+				height: inherit;
+
+				p {
+					margin: 0;
+				}
+
+				@apply border-2;
+				@apply border-black;
+			}
+		}
+	}
+}

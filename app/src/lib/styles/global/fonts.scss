@@ -1,0 +1,25 @@
+@layer base {
+	h1 {
+		@apply text-7xl;
+		@apply font-bold;
+		letter-spacing: -3.2px;
+	}
+
+	h2 {
+		@apply text-5xl;
+		@apply leading-tight;
+		letter-spacing: -1.92px;
+	}
+
+	h3 {
+		@apply text-3xl;
+		@apply leading-tight;
+		letter-spacing: -0.96px;
+	}
+
+	h4 {
+		@apply text-2xl;
+		@apply leading-tight;
+		letter-spacing: -0.72px;
+	}
+}
