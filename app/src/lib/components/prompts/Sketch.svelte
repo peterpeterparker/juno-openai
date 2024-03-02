@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DrawCanvas from '$lib/components/prompts/DrawCanvas.svelte';
+	import Canvas from '$lib/components/prompts/Canvas.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import IconCamera from '$lib/components/icons/IconCamera.svelte';
 	import { uploadBlob } from '@junobuild/core-peer';
@@ -43,7 +43,7 @@
 
 			const { fullPath } = await uploadBlob({
 				data: blob,
-				collection: 'images',
+				collection: 'sketches',
 				filename: `${nanoid()}.png`
 			});
 
@@ -59,7 +59,7 @@
 	};
 </script>
 
-<DrawCanvas bind:canvas bind:untouched />
+<Canvas bind:canvas bind:untouched />
 
 <PromptAction>
 	<Button color="quaternary" on:click={async () => await snapshot()}>

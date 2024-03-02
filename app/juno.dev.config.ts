@@ -21,7 +21,7 @@ export default defineDevConfig(() => ({
 			],
 			storage: [
 				{
-					collection: 'images',
+					collection: 'sketches',
 					memory: 'Heap' as const,
 					read: 'managed' as const,
 					write: 'managed' as const,

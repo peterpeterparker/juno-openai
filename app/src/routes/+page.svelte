@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Juno from '$lib/components/core/Juno.svelte';
-	import Draw from '$lib/components/prompts/Draw.svelte';
+	import Sketch from '$lib/components/prompts/Sketch.svelte';
 	import Renderings from '$lib/components/results/Renderings.svelte';
-	import Write from '$lib/components/prompts/Write.svelte';
+	import Prompt from '$lib/components/prompts/Prompt.svelte';
 	import { fade } from 'svelte/transition';
 	import { promptStore } from '$lib/stores/app.stores';
 </script>
@@ -13,11 +13,11 @@
 	>
 		{#if $promptStore === 'draw'}
 			<div in:fade class="w-full h-full flex flex-col items-center">
-				<Draw />
+				<Sketch />
 			</div>
 		{:else}
 			<div in:fade class="w-full h-full flex flex-col items-center">
-				<Write />
+				<Prompt />
 			</div>
 		{/if}
 	</aside>

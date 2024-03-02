@@ -70,7 +70,7 @@ async fn on_delete_many_docs(_context: OnDeleteManyDocsContext) -> Result<(), St
     Ok(())
 }
 
-#[on_upload_asset(collections = ["images"])]
+#[on_upload_asset(collections = ["sketches"])]
 async fn on_upload_asset(context: OnUploadAssetContext) -> Result<(), String> {
     // Example localhost: http://jx5yt-yyaaa-aaaal-abzbq-cai.localhost:5987/images/carbon.png
     // Example mainnet: https://xo2hm-lqaaa-aaaal-ab3oa-cai.icp0.io/images/house123.png
