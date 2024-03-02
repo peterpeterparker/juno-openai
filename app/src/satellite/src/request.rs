@@ -54,16 +54,16 @@ pub fn gpt_body_image_generation(prompt: &str) -> Value {
     })
 }
 
-fn gpt_body_vision_preview(_download_url: &String) -> Value {
+fn gpt_body_vision_preview(download_url: &String) -> Value {
     json!({
         "model": "gpt-4-vision-preview".to_string(),
         "max_tokens": 4096,
         "temperature": 0.0,
-        "messages": messages("https://xo2hm-lqaaa-aaaal-ab3oa-cai.icp0.io/images/house123.png".to_string())
+        "messages": messages(download_url)
     })
 }
 
-fn messages(download_url: String) -> Value {
+fn messages(download_url: &String) -> Value {
     let system_prompt = "You are an expert web designer who specializes in programming SVG. \
 You are famous for designing those SVG while following movements of arts that included expressionism and surrealism. \
 You explored color theory as well. \
