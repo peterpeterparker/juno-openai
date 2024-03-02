@@ -22,7 +22,7 @@ export default defineDevConfig(() => ({
 			storage: [
 				{
 					collection: 'sketches',
-					memory: 'Heap' as const,
+					memory: 'Stable' as const,
 					read: 'managed' as const,
 					write: 'managed' as const,
 					mutablePermissions: true,
