@@ -19,7 +19,7 @@ use junobuild_satellite::{
 };
 use junobuild_utils::decode_doc_data;
 
-#[on_set_doc]
+#[on_set_doc=(collections = ["prompts"])]
 async fn on_set_doc(context: OnSetDocContext) -> Result<(), String> {
     let data: DocPromptData = decode_doc_data(&context.data.data.after.data)?;
 
