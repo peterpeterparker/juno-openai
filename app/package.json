@@ -12,7 +12,8 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@junobuild/vite-plugin": "^0.0.7",
+		"@junobuild/config": "^0.0.4",
+		"@junobuild/vite-plugin": "^0.0.8",
 		"@rollup/plugin-inject": "^5.0.5",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
