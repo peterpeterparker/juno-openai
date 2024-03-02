@@ -21,7 +21,7 @@
 		try {
 			// We now the fullPath is defined here, just a simplification for demo purpose
 			doc = await getDoc({
-				collection: 'drawings',
+				collection: 'renderings',
 				key: $keyStore!
 			});
 

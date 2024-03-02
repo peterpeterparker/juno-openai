@@ -5,7 +5,7 @@ export default defineDevConfig(() => ({
 		collections: {
 			db: [
 				{
-					collection: 'drawings',
+					collection: 'renderings',
 					memory: 'Stable' as const,
 					read: 'managed' as const,
 					write: 'managed' as const,

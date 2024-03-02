@@ -46,7 +46,7 @@ pub fn save_to_store(caller: Principal, key: String, drawing: DrawingResult) -> 
         updated_at: None,
     };
 
-    set_doc_store(caller, "drawings".to_string(), key, doc)?;
+    set_doc_store(caller, "renderings".to_string(), key, doc)?;
 
     Ok(())
 }

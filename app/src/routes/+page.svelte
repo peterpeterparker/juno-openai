@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Juno from '$lib/components/core/Juno.svelte';
 	import Draw from '$lib/components/prompts/Draw.svelte';
-	import Drawing from '$lib/components/results/Drawing.svelte';
+	import Renderings from '$lib/components/results/Renderings.svelte';
 	import Write from '$lib/components/prompts/Write.svelte';
 	import { fade } from 'svelte/transition';
 	import { promptStore } from '$lib/stores/app.stores';
@@ -23,6 +23,6 @@
 	</aside>
 
 	<section class="bg-cyan-200 pt-28 md:pt-36 pb-16 px-24 flex flex-col items-center min-h-dvh">
-		<Drawing />
+		<Renderings />
 	</section>
 </Juno>
