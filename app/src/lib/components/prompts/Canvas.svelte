@@ -92,6 +92,7 @@
 		draw();
 	};
 
+	// This is a demo implementation. IRL we probably want to use 60 fps.
 	const draw = () => {
 		if (isNullish(size) || isNullish(ctx)) {
 			// For simplicity reason, this is a demo
@@ -99,6 +100,12 @@
 		}
 
 		ctx.clearRect(0, 0, size.width, size.height);
+
+		// Without background OpenAI respond with following error:
+		// "I'm sorry, but there is no image content visible in your message. Please provide a low-fidelity sketch or description for me to create an SVG file for you."
+		ctx.fillStyle = "#fff";
+		ctx.fillRect(0, 0, size.width, size.height);
+
 		for (const drawable of drawables) {
 			drawable.draw(ctx);
 		}
