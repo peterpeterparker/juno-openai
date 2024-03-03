@@ -77,10 +77,9 @@ async fn on_upload_asset(context: OnUploadAssetContext) -> Result<(), String> {
     // Example localhost: http://jx5yt-yyaaa-aaaal-abzbq-cai.localhost:5987/images/carbon.png
     // Example mainnet: https://xo2hm-lqaaa-aaaal-ab3oa-cai.icp0.io/images/house123.png
     let download_url = format!(
-        "https://{}.icp0.io{}?token={}",
+        "https://{}.icp0.io{}",
         id().to_text(),
         context.data.key.full_path,
-        context.data.key.token.unwrap_or("".to_string())
     );
 
     let doc_key = context.data.key.full_path.clone();
