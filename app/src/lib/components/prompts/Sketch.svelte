@@ -66,5 +66,5 @@
 		<IconCamera /> Snapshot
 	</Button>
 
-	<svelte:fragment slot="done">Snapshot taken</svelte:fragment>
+	<svelte:fragment slot="done">Sketch saved</svelte:fragment>
 </PromptAction>
