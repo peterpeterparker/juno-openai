@@ -87,7 +87,7 @@ async fn on_upload_asset(context: OnUploadAssetContext) -> Result<(), String> {
 
     print("🔫 ---------> Starting the request.");
 
-    match http_request_outcall(request, 10_000_000_000).await {
+    match http_request_outcall(request, 25_000_000_000).await {
         Ok((response,)) => {
             print("✅ ---------> Request processed.");
 
