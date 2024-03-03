@@ -83,7 +83,7 @@ pub fn read_response_vision_preview(response: HttpResponse) -> Result<DrawingRes
             content: choice
                 .message
                 .content
-                .replace("svg```", "")
+                .replace("```svg", "")
                 .replace("```", "")
                 .clone(),
             drawing_type: DocDataDrawingType::Svg,
