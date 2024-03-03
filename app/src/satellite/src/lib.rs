@@ -3,7 +3,9 @@ mod request;
 mod response;
 
 use crate::doc::{save_to_store, DocPromptData};
-use crate::request::{get_request_image_generation, get_request_vision_preview, transform_response};
+use crate::request::{
+    get_request_image_generation, get_request_vision_preview, transform_response,
+};
 use crate::response::{
     read_response_image_generation, read_response_vision_preview, DrawingResult,
 };
@@ -102,7 +104,11 @@ async fn on_upload_asset(context: OnUploadAssetContext) -> Result<(), String> {
 
             print(format!("‼️ ---------> {}.", message));
 
-            save_to_store(context.caller, doc_key, DrawingResult::Error(message.clone()))?;
+            save_to_store(
+                context.caller,
+                doc_key,
+                DrawingResult::Error(message.clone()),
+            )?;
         }
     }
 
@@ -120,7 +126,9 @@ async fn on_delete_many_assets(_context: OnDeleteManyAssetsContext) -> Result<()
 }
 
 #[ic_cdk_macros::query]
-fn transform(raw: ic_cdk::api::management_canister::http_request::TransformArgs) -> ic_cdk::api::management_canister::http_request::HttpResponse {
+fn transform(
+    raw: ic_cdk::api::management_canister::http_request::TransformArgs,
+) -> ic_cdk::api::management_canister::http_request::HttpResponse {
     transform_response(raw)
 }
 

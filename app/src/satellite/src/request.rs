@@ -1,8 +1,14 @@
-use ic_cdk::api::management_canister::http_request::{CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse as HttpResponseCdk, TransformArgs as TransformArgsCdk, TransformContext as TransformContextCdk};
+use ic_cdk::api::management_canister::http_request::{
+    CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse as HttpResponseCdk,
+    TransformArgs as TransformArgsCdk, TransformContext as TransformContextCdk,
+};
 use ic_cdk::print;
 use serde_json::{json, Value};
 
-pub fn get_request_image_generation(key: &str, prompt: &str) -> Result<CanisterHttpRequestArgument, String> {
+pub fn get_request_image_generation(
+    key: &str,
+    prompt: &str,
+) -> Result<CanisterHttpRequestArgument, String> {
     let body = gpt_body_image_generation(prompt);
     get_request(key, body, "images/generations".to_string())
 }
@@ -15,7 +21,11 @@ pub fn get_request_vision_preview(
     get_request(key, body, "chat/completions".to_string())
 }
 
-fn get_request(key: &str, body: Value, url_path: String) -> Result<CanisterHttpRequestArgument, String> {
+fn get_request(
+    key: &str,
+    body: Value,
+    url_path: String,
+) -> Result<CanisterHttpRequestArgument, String> {
     let body_json = serde_json::to_string(&body).map_err(|e| e.to_string())?;
 
     let request_headers = vec![
@@ -38,7 +48,10 @@ fn get_request(key: &str, body: Value, url_path: String) -> Result<CanisterHttpR
         method: HttpMethod::POST,
         body: Some(body_json.into_bytes()),
         max_response_bytes: None,
-        transform: Some(TransformContextCdk::from_name("transform".to_string(), serde_json::to_vec(&Vec::<u8>::new()).unwrap())),
+        transform: Some(TransformContextCdk::from_name(
+            "transform".to_string(),
+            serde_json::to_vec(&Vec::<u8>::new()).unwrap(),
+        )),
         headers: request_headers,
     };
 
