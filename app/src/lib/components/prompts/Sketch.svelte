@@ -44,7 +44,8 @@
 			const { fullPath } = await uploadBlob({
 				data: blob,
 				collection: 'sketches',
-				filename: `${nanoid()}.png`
+				filename: `${nanoid()}.png`,
+				token: `${nanoid()}`
 			});
 
 			keyStore.set(fullPath);
