@@ -1,10 +1,10 @@
 import * as express from "express";
 import * as cors from "cors";
 import * as functions from "firebase-functions";
-import {tmpdir} from "node:os";
-import {join} from "node:path";
-import {readFile, writeFile} from "node:fs/promises";
-import {existsSync} from "node:fs";
+import {initializeApp} from "firebase-admin/app";
+import {getFirestore} from "firebase-admin/firestore";
+
+initializeApp();
 
 const app = express();
 app.use(express.json());
@@ -24,26 +24,17 @@ const runtimeOpts = {
 const readCachedResponse = async (
   key: string,
 ): Promise<unknown | undefined> => {
-  const cachePath = join(tmpdir(), `${key}.json`);
+  const doc = await getFirestore().collection("cache").doc(key).get();
 
-  if (!existsSync(cachePath)) {
+  if (!doc.exists) {
     return undefined;
   }
 
-  const data = await readFile(join(tmpdir(), `${key}.json`), "utf-8");
-  return JSON.parse(data);
+  return doc.data();
 };
 
-const writeCacheResponse = async ({
-  key,
-  data,
-}: {
-  key: string;
-  data: unknown;
-}) => {
-  const cachePath = join(tmpdir(), `${key}.json`);
-
-  await writeFile(cachePath, JSON.stringify(data));
+const writeCacheResponse = async ({key, data}: {key: string; data: object}) => {
+  await getFirestore().collection("cache").doc(key).set(data);
 };
 
 const proxyOpenAi = async ({
@@ -74,7 +65,7 @@ const proxyOpenAi = async ({
   }
 
   try {
-    const data = await fetchOpenAi({req, res, api});
+    const data = await fetchOpenAi({req, api});
 
     // To minimize replicated issues, given that our goal is to always return the same response for an idempotency key, we check the cache once again after the result of the call.
     const cachedResponse = await readCachedResponse(key);
@@ -93,13 +84,11 @@ const proxyOpenAi = async ({
 
 const fetchOpenAi = async ({
   req,
-  res,
   api,
 }: {
   req: express.Request;
-  res: express.Response;
   api: "images/generations" | "chat/completions";
-}): Promise<unknown> => {
+}): Promise<object> => {
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${openaiKey}`,
@@ -112,8 +101,9 @@ const fetchOpenAi = async ({
   });
 
   if (!response.ok) {
-    res.status(response.status).send(response.statusText);
-    return;
+    throw new Error(
+      `Response not ok. Status ${response.status}. Message ${response.statusText}.`,
+    );
   }
 
   return await response.json();
