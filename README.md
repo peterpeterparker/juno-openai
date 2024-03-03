@@ -4,7 +4,19 @@ This demo showcases a straightforward integration of OpenAI's technologies, incl
 
 ## Notes
 
-This sample is provided without documentation. For any questions or further assistance, please feel free to reach out on our [Discord](https://discord.gg/wHZ57Z2RAG) channel.
+This sample is provided without much documentation. For any questions or further assistance, please feel free to reach out on our [Discord](https://discord.gg/wHZ57Z2RAG) channel.
+
+## How does it work?
+
+A browser-based application interacts with a Satellite, a smart contract, which prompts the OpenAI API through a proxy deployed on Google Firebase.
+
+![Overview](./assets/overview.png)
+
+The client does not interact directly with nor request the generation of images but only saves prompts in the smart contract. This contract implements serverless functions triggered through hooks upon changes in the key store database or its file system.
+
+These hooks take care of querying the proxy through HTTP outcalls. The proxy itself ensures that it forwards only one request to OpenAI per request and caches the answer. This way, the blockchain can query the proxy multiple times with a similar request and will receive an identical answer, which the replication can validate.
+
+![Flow chat](./assets/flow.png)
 
 ### Links & Resources
 
