@@ -21,10 +21,24 @@ const runtimeOpts = {
   timeoutSeconds: 300,
 };
 
+const readQuery = async (key: string): Promise<unknown | undefined> => {
+  return await read({key, collection: "query"});
+};
+
 const readCachedResponse = async (
   key: string,
 ): Promise<unknown | undefined> => {
-  const doc = await getFirestore().collection("cache").doc(key).get();
+  return await read({key, collection: "cache"});
+};
+
+const read = async ({
+  key,
+  collection,
+}: {
+  key: string;
+  collection: "cache" | "query";
+}): Promise<unknown | undefined> => {
+  const doc = await getFirestore().collection(collection).doc(key).get();
 
   if (!doc.exists) {
     return undefined;
@@ -35,6 +49,16 @@ const readCachedResponse = async (
 
 const writeCacheResponse = async ({key, data}: {key: string; data: object}) => {
   await getFirestore().collection("cache").doc(key).set(data);
+};
+
+const writeQuery = async ({
+  key,
+  status,
+}: {
+  key: string;
+  status: "pending" | "success" | "error";
+}) => {
+  await getFirestore().collection("key").doc(key).set({status});
 };
 
 const proxyOpenAi = async ({
@@ -57,29 +81,57 @@ const proxyOpenAi = async ({
     return;
   }
 
-  // If cached response, return cache
-  const cachedResponse = await readCachedResponse(key);
-  if (cachedResponse !== undefined) {
-    res.json(cachedResponse);
+  const query = await readQuery(key);
+
+  if (query !== undefined) {
+    await pollCachedResponse({key, res});
     return;
   }
 
   try {
     const data = await fetchOpenAi({req, api});
 
-    // To minimize replicated issues, given that our goal is to always return the same response for an idempotency key, we check the cache once again after the result of the call.
-    const cachedResponse = await readCachedResponse(key);
-    if (cachedResponse !== undefined) {
-      res.json(cachedResponse);
-      return;
-    }
-
-    await writeCacheResponse({key, data});
+    await Promise.all([
+      writeCacheResponse({key, data}),
+      writeQuery({key, status: "success"}),
+    ]);
 
     res.json(data);
   } catch (error: unknown) {
+    await writeQuery({key, status: "error"});
+
     res.status(500).send(error);
   }
+};
+
+const waitOneSecond = (): Promise<void> => {
+  return new Promise<void>((resolve) => {
+    setTimeout(resolve, 1000);
+  });
+};
+
+const pollCachedResponse = async ({
+  key,
+  res,
+  attempt = 1,
+}: {
+  key: string;
+  res: express.Response;
+  attempt?: number;
+}): Promise<void> => {
+  const cache = await readCachedResponse(key);
+
+  if (cache !== undefined) {
+    res.json(cache);
+    return;
+  }
+
+  if (attempt < 30) {
+    await waitOneSecond();
+    return await pollCachedResponse({key, res, attempt: attempt + 1});
+  }
+
+  res.status(500).send("No cached response found after 30 seconds");
 };
 
 const fetchOpenAi = async ({
