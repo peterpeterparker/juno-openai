@@ -54,11 +54,16 @@ const writeCacheResponse = async ({key, data}: {key: string; data: object}) => {
 const writeQuery = async ({
   key,
   status,
+  err,
 }: {
   key: string;
   status: "pending" | "success" | "error";
+  err?: unknown;
 }) => {
-  await getFirestore().collection("query").doc(key).set({status});
+  await getFirestore()
+    .collection("query")
+    .doc(key)
+    .set({status, ...(err !== undefined && {error: JSON.stringify(err)})});
 };
 
 const proxyOpenAi = async ({
@@ -97,10 +102,10 @@ const proxyOpenAi = async ({
     ]);
 
     res.json(data);
-  } catch (error: unknown) {
-    await writeQuery({key, status: "error"});
+  } catch (err: unknown) {
+    await writeQuery({key, status: "error", err});
 
-    res.status(500).send(error);
+    res.status(500).send(err);
   }
 };
 
