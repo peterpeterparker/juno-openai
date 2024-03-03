@@ -58,7 +58,7 @@ const writeQuery = async ({
   key: string;
   status: "pending" | "success" | "error";
 }) => {
-  await getFirestore().collection("key").doc(key).set({status});
+  await getFirestore().collection("query").doc(key).set({status});
 };
 
 const proxyOpenAi = async ({
