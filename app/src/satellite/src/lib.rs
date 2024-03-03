@@ -3,7 +3,7 @@ mod request;
 mod response;
 
 use crate::doc::{save_to_store, DocPromptData};
-use crate::request::{get_request_image_generation, get_request_vision_preview};
+use crate::request::{get_request_image_generation, get_request_vision_preview, transform_response};
 use crate::response::{
     read_response_image_generation, read_response_vision_preview, DrawingResult,
 };
@@ -117,6 +117,11 @@ async fn on_delete_asset(_context: OnDeleteAssetContext) -> Result<(), String> {
 #[on_delete_many_assets]
 async fn on_delete_many_assets(_context: OnDeleteManyAssetsContext) -> Result<(), String> {
     Ok(())
+}
+
+#[ic_cdk_macros::query]
+fn transform(raw: ic_cdk::api::management_canister::http_request::TransformArgs) -> ic_cdk::api::management_canister::http_request::HttpResponse {
+    transform_response(raw)
 }
 
 include_satellite!();
