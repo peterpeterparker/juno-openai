@@ -2,7 +2,6 @@ use ic_cdk::api::management_canister::http_request::{
     CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse as HttpResponseCdk,
     TransformArgs as TransformArgsCdk, TransformContext as TransformContextCdk,
 };
-use ic_cdk::print;
 use serde_json::{json, Value};
 
 pub fn get_request_image_generation(
