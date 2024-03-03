@@ -3,19 +3,20 @@ use ic_cdk::api::management_canister::http_request::{
 };
 use serde_json::{json, Value};
 
-pub fn get_request_image_generation(prompt: &str) -> Result<CanisterHttpRequestArgument, String> {
+pub fn get_request_image_generation(key: &str, prompt: &str) -> Result<CanisterHttpRequestArgument, String> {
     let body = gpt_body_image_generation(prompt);
-    get_request(body, "images/generations".to_string())
+    get_request(key, body, "images/generations".to_string())
 }
 
 pub fn get_request_vision_preview(
+    key: &str,
     download_url: &String,
 ) -> Result<CanisterHttpRequestArgument, String> {
     let body = gpt_body_vision_preview(download_url);
-    get_request(body, "chat/completions".to_string())
+    get_request(key, body, "chat/completions".to_string())
 }
 
-fn get_request(body: Value, url_path: String) -> Result<CanisterHttpRequestArgument, String> {
+fn get_request(key: &str, body: Value, url_path: String) -> Result<CanisterHttpRequestArgument, String> {
     let body_json = serde_json::to_string(&body).map_err(|e| e.to_string())?;
 
     let request_headers = vec![
@@ -24,9 +25,9 @@ fn get_request(body: Value, url_path: String) -> Result<CanisterHttpRequestArgum
             value: "application/json".to_string(),
         },
         HttpHeader {
-            name: "User-Agent".to_string(),
-            value: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36".to_string(),
-        }
+            name: "idempotency-key".to_string(),
+            value: key.to_owned(),
+        },
     ];
 
     let request = CanisterHttpRequestArgument {

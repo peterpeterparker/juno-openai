@@ -23,7 +23,7 @@ use junobuild_utils::decode_doc_data;
 async fn on_set_doc(context: OnSetDocContext) -> Result<(), String> {
     let data: DocPromptData = decode_doc_data(&context.data.data.after.data)?;
 
-    let request = get_request_image_generation(&data.prompt)?;
+    let request = get_request_image_generation(&context.data.key, &data.prompt)?;
 
     print("🔫 ---------> Starting the request.");
 
@@ -81,9 +81,9 @@ async fn on_upload_asset(context: OnUploadAssetContext) -> Result<(), String> {
         context.data.key.token.unwrap_or("".to_string())
     );
 
-    let key = context.data.key.full_path.clone();
+    let doc_key = context.data.key.full_path.clone();
 
-    let request = get_request_vision_preview(&download_url)?;
+    let request = get_request_vision_preview(&context.data.key.name, &download_url)?;
 
     print("🔫 ---------> Starting the request.");
 
@@ -93,7 +93,7 @@ async fn on_upload_asset(context: OnUploadAssetContext) -> Result<(), String> {
 
             let result = read_response_vision_preview(response)?;
 
-            save_to_store(context.caller, key, result)?;
+            save_to_store(context.caller, doc_key, result)?;
 
             print("👍 ---------> All good.");
         }
@@ -102,7 +102,7 @@ async fn on_upload_asset(context: OnUploadAssetContext) -> Result<(), String> {
 
             print(format!("‼️ ---------> {}.", message));
 
-            save_to_store(context.caller, key, DrawingResult::Error(message.clone()))?;
+            save_to_store(context.caller, doc_key, DrawingResult::Error(message.clone()))?;
         }
     }
 
