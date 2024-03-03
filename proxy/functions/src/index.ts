@@ -3,14 +3,13 @@ import * as cors from "cors";
 import * as functions from "firebase-functions";
 import {initializeApp} from "firebase-admin/app";
 import {getFirestore} from "firebase-admin/firestore";
+import {log} from "firebase-functions/logger";
 
 initializeApp();
 
 const app = express();
 app.use(express.json());
 app.use(cors({origin: true}));
-
-// const cors = corsLib({origin: true});
 
 // $ firebase functions:config:set openai.key="..."
 const openaiKey: string = functions.config().openai.key;
@@ -21,7 +20,7 @@ const runtimeOpts = {
   timeoutSeconds: 300,
 };
 
-const readQuery = async (key: string): Promise<unknown | undefined> => {
+const readQuery = async (key: string): Promise<Query | undefined> => {
   return await read({key, collection: "query"});
 };
 
@@ -31,39 +30,71 @@ const readCachedResponse = async (
   return await read({key, collection: "cache"});
 };
 
-const read = async ({
+const read = async <T>({
   key,
   collection,
 }: {
   key: string;
   collection: "cache" | "query";
-}): Promise<unknown | undefined> => {
+}): Promise<T | undefined> => {
   const doc = await getFirestore().collection(collection).doc(key).get();
 
   if (!doc.exists) {
     return undefined;
   }
 
-  return doc.data();
+  return doc.data() as T;
 };
 
 const writeCacheResponse = async ({key, data}: {key: string; data: object}) => {
   await getFirestore().collection("cache").doc(key).set(data);
 };
 
-const writeQuery = async ({
+interface Query {
+  status: "pending" | "success" | "error";
+  error?: string;
+}
+
+const updateQuery = async ({
   key,
   status,
-  err,
+  error,
 }: {
   key: string;
   status: "pending" | "success" | "error";
-  err?: unknown;
+  error?: string;
 }) => {
   await getFirestore()
     .collection("query")
     .doc(key)
-    .set({status, ...(err !== undefined && {error: JSON.stringify(err)})});
+    .update({status, ...(error !== undefined && {error})});
+};
+
+const initPendingQuery = async ({
+  key,
+}: {
+  key: string;
+}): Promise<{success: boolean}> => {
+  const db = getFirestore();
+  const ref = db.collection("query").doc(key);
+
+  try {
+    await db.runTransaction(async (t) => {
+      const doc = await t.get(ref);
+
+      if (doc.exists) {
+        throw new Error("Document already exists.");
+      }
+
+      t.set(ref, {
+        status: "pending",
+      });
+    });
+
+    return {success: true};
+  } catch (_err: unknown) {
+    return {success: false};
+  }
 };
 
 const proxyOpenAi = async ({
@@ -88,7 +119,18 @@ const proxyOpenAi = async ({
 
   const query = await readQuery(key);
 
+  log("Query exists?", key, query !== undefined);
+
   if (query !== undefined) {
+    await pollCachedResponse({key, res});
+    return;
+  }
+
+  const {success} = await initPendingQuery({key});
+
+  log("Insert query success?", success);
+
+  if (!success) {
     await pollCachedResponse({key, res});
     return;
   }
@@ -96,14 +138,23 @@ const proxyOpenAi = async ({
   try {
     const data = await fetchOpenAi({req, api});
 
+    log("Ok for god sake.");
+
     await Promise.all([
       writeCacheResponse({key, data}),
-      writeQuery({key, status: "success"}),
+      updateQuery({key, status: "success"}),
     ]);
 
     res.json(data);
-  } catch (err: unknown) {
-    await writeQuery({key, status: "error", err});
+  } catch (err: Error | unknown) {
+    log("Error WTF", err);
+
+    const error =
+      err instanceof Error && err.message !== undefined
+        ? err.message
+        : "An unexpected error was thrown while calling OpenAI.";
+
+    await updateQuery({key, status: "error", error});
 
     res.status(500).send(err);
   }
@@ -131,12 +182,18 @@ const pollCachedResponse = async ({
     return;
   }
 
+  const query = await readQuery(key);
+  if (query?.error !== undefined) {
+    res.status(500).send("The fetch to OpenAI failed.");
+    return;
+  }
+
   if (attempt < 30) {
     await waitOneSecond();
     return await pollCachedResponse({key, res, attempt: attempt + 1});
   }
 
-  res.status(500).send("No cached response found after 30 seconds");
+  res.status(500).send("No cached response found after 30 seconds.");
 };
 
 const fetchOpenAi = async ({
@@ -156,6 +213,8 @@ const fetchOpenAi = async ({
     headers,
     body: JSON.stringify(req.body),
   });
+
+  log("Not OKOKOK");
 
   if (!response.ok) {
     throw new Error(
