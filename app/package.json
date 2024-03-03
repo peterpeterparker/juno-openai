@@ -3,13 +3,18 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"build:csp": "node scripts/build.csp.mjs",
+		"build:post-process": "npm run build:csp",
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "tsc --noEmit && vite build && npm run build:post-process",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"postinstall_analytics": "node -e \"require('fs').cpSync('node_modules/@junobuild/analytics/dist/workers/', './static/workers', {recursive: true});\"",
+		"postinstall_auth": "node -e \"require('fs').cpSync('node_modules/@junobuild/core-peer/dist/workers/', './static/workers', {recursive: true});\"",
+		"postinstall": "npm run postinstall_auth && npm run postinstall_analytics"
 	},
 	"devDependencies": {
 		"@junobuild/config": "^0.0.4",
