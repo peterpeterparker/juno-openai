@@ -27,7 +27,7 @@ async fn on_set_doc(context: OnSetDocContext) -> Result<(), String> {
 
     print("🔫 ---------> Starting the request.");
 
-    match http_request_outcall(request, 5_000_000_000).await {
+    match http_request_outcall(request, 25_000_000_000).await {
         Ok((response,)) => {
             print("✅ ---------> Request processed.");
 
