@@ -3,7 +3,6 @@ import * as cors from "cors";
 import * as functions from "firebase-functions";
 import {initializeApp} from "firebase-admin/app";
 import {getFirestore} from "firebase-admin/firestore";
-import {log} from "firebase-functions/logger";
 
 initializeApp();
 
@@ -119,16 +118,12 @@ const proxyOpenAi = async ({
 
   const query = await readQuery(key);
 
-  log("Query exists?", key, query !== undefined);
-
   if (query !== undefined) {
     await pollCachedResponse({key, res});
     return;
   }
 
   const {success} = await initPendingQuery({key});
-
-  log("Insert query success?", success);
 
   if (!success) {
     await pollCachedResponse({key, res});
@@ -138,8 +133,6 @@ const proxyOpenAi = async ({
   try {
     const data = await fetchOpenAi({req, api});
 
-    log("Ok for god sake.");
-
     await Promise.all([
       writeCacheResponse({key, data}),
       updateQuery({key, status: "success"}),
@@ -147,8 +140,6 @@ const proxyOpenAi = async ({
 
     res.json(data);
   } catch (err: Error | unknown) {
-    log("Error WTF", err);
-
     const error =
       err instanceof Error && err.message !== undefined
         ? err.message
@@ -156,6 +147,8 @@ const proxyOpenAi = async ({
 
     await updateQuery({key, status: "error", error});
 
+    // Note: Given that we do not return always the same error from the function, the smart contract will display an error that it cannot replicate the response.
+    // Again, it's just a demo app.
     res.status(500).send(err);
   }
 };
@@ -213,8 +206,6 @@ const fetchOpenAi = async ({
     headers,
     body: JSON.stringify(req.body),
   });
-
-  log("Not OKOKOK");
 
   if (!response.ok) {
     throw new Error(
