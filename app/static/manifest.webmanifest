@@ -2,8 +2,8 @@
 	"name": "Juno <> OpenAi",
 	"short_name": "Juno <> OpenAi",
 	"start_url": "/",
-	"background_color": "#FFF59F",
-	"theme_color": "#FFF59F",
+	"background_color": "#FFFFFF",
+	"theme_color": "#FFFFFF",
 	"display": "standalone",
 	"icons": [
 		{ "src": "icons/icon-48x48.png", "sizes": "48x48", "type": "image/png", "purpose": "any" },
