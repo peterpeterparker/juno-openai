@@ -9,7 +9,7 @@
 
 <Juno>
 	<aside
-		class="bg-yellow-200 border-b-2 lg:border-b-0 lg:border-r-2 border-black pt-28 md:pt-36 pb-16 px-24"
+		class="bg-yellow-200 border-b-2 lg:border-b-0 lg:border-r-2 border-black pt-28 md:pt-36 md:pb-8 md:px-24 px-8"
 	>
 		{#if $promptStore === 'draw'}
 			<div in:fade class="w-full h-full flex flex-col items-center">
@@ -22,7 +22,7 @@
 		{/if}
 	</aside>
 
-	<section class="bg-cyan-200 pt-28 md:pt-36 pb-16 px-24 flex flex-col items-center min-h-dvh">
+	<section class="bg-cyan-200 pt-12 md:pt-36 pb-12 md:pb-8 md:px-24 px-8 flex flex-col items-center md:min-h-dvh">
 		<Renderings />
 	</section>
 </Juno>
