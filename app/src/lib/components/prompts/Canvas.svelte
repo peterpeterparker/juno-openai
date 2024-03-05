@@ -6,6 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import { keyNotLoaded } from '$lib/derived/asset.derived';
 	import Container from '$lib/components/ui/Container.svelte';
+	import { layoutOverflowY } from '$lib/stores/app.stores';
 
 	/**
 	 * Draw pane and size
@@ -103,13 +104,24 @@
 
 		// Without background OpenAI respond with following error:
 		// "I'm sorry, but there is no image content visible in your message. Please provide a low-fidelity sketch or description for me to create an SVG file for you."
-		ctx.fillStyle = "#fff";
+		ctx.fillStyle = '#fff';
 		ctx.fillRect(0, 0, size.width, size.height);
 
 		for (const drawable of drawables) {
 			drawable.draw(ctx);
 		}
 	};
+
+	const onDraw = () => {
+		if (drawEvents) {
+			layoutOverflowY.set('hidden');
+			return;
+		}
+
+		layoutOverflowY.set('auto');
+	};
+
+	$: drawEvents, onDraw();
 </script>
 
 <svelte:window on:resize={onResize} />

@@ -4,3 +4,5 @@ import { writable } from 'svelte/store';
 export const keyStore = writable<string | undefined>(undefined);
 
 export const promptStore = writable<Prompt>('write');
+
+export const layoutOverflowY = writable<'auto' | 'hidden'>('auto');
