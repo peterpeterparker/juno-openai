@@ -1,10 +1,14 @@
 # Juno <> OpenAI
 
+🔗 [https://pycrs-xiaaa-aaaal-ab6la-cai.icp0.io/](https://pycrs-xiaaa-aaaal-ab6la-cai.icp0.io/)
+
 This demo showcases a straightforward integration of OpenAI's technologies, including DALL·E and the GPT-4 Vision Preview, into a decentralized application (dApp) using [Juno](https://juno.build)'s platform. It utilizes smart contracts to query OpenAI's models, leveraging the efficiency and scalability of Juno's serverless functions. This example illustrates how Juno's infrastructure can be used to incorporate AI capabilities into blockchain applications, providing a practical approach to accessing advanced AI features through smart contract operations.
 
 ## Notes
 
 This sample is provided without much documentation. For any questions or further assistance, please feel free to reach out on our [Discord](https://discord.gg/wHZ57Z2RAG) channel.
+
+The deployed showcase, including both the dapp and proxy, might be deleted a few days after my presentation is over. Therefore, if you try to use the above link unsuccessfully, this might be expected. 😉
 
 ## How does it work?
 
