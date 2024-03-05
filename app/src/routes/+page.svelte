@@ -22,7 +22,9 @@
 		{/if}
 	</aside>
 
-	<section class="bg-cyan-200 pt-12 md:pt-36 pb-12 md:pb-8 md:px-24 px-8 flex flex-col items-center min-h-[50dvh] md:min-h-dvh">
+	<section
+		class="bg-cyan-200 pt-12 md:pt-36 pb-12 md:pb-8 md:px-24 px-8 flex flex-col items-center min-h-[50dvh] md:min-h-dvh"
+	>
 		<Renderings />
 	</section>
 </Juno>
