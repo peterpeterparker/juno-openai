@@ -1,3 +1,10 @@
+1. `juno dev start`
+
+2. In `vite.config.ts` set `container: true`
+
+3. Config local
+
+```typescript
 import { defineDevConfig } from '@junobuild/config';
 
 export default defineDevConfig(() => ({
@@ -33,3 +40,18 @@ export default defineDevConfig(() => ({
 		controllers: []
 	}
 }));
+```
+
+4. `juno dev eject`
+
+5. Implement `ic_cdk::print("Hello World 👋");`
+
+6. Implement HTTP outcalls
+
+7. Upgrade mainnet `juno upgrade -t s -s target/deploy/satellite.wasm.gz`
+
+Go further:
+
+8. Implement Analytics
+
+9. Show GitHub Actions 

@@ -7,9 +7,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [
 		sveltekit(),
-		juno({
-			container: true
-		})
+		juno()
 	],
 	build: {
 		target: 'es2020',
