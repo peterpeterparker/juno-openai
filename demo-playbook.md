@@ -1,22 +1,6 @@
 1. Run locally
 
-2. Implement setDoc
-
-> TODO: find and replace STEP_2_SET_DOC
-
-```typescript
-await setDoc<PromptData>({
-    collection: 'prompts',
-    doc: {
-        key,
-        data: {
-            prompt: text
-        }
-    }
-});
-
-keyStore.set(key);
-```
+2. Remove alert `TODO: implement the process, locally!`
 
 3. `juno dev start`
 

@@ -30,7 +30,19 @@
 		try {
 			const key = nanoid();
 
-			alert("TODO: find and replace STEP_2_SET_DOC");
+			await setDoc<PromptData>({
+				collection: 'prompts',
+				doc: {
+					key,
+					data: {
+						prompt: text
+					}
+				}
+			});
+
+			alert("TODO: implement the process, locally!");
+
+			keyStore.set(key);
 		} catch (err: unknown) {
 			toasts.error({
 				msg: { text: 'Something went wrong while saving your prompt.' },
