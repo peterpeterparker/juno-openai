@@ -41,7 +41,14 @@
 				return;
 			}
 
-			alert("TODO: find and replace STEP_10_UPLOAD_BLOB");
+			const { fullPath } = await uploadBlob({
+				data: blob,
+				collection: 'sketches',
+				filename: `${nanoid()}.png`,
+				token: `${nanoid()}`
+			});
+
+			keyStore.set(fullPath);
 		} catch (err: unknown) {
 			toasts.error({
 				msg: { text: 'Something went wrong while uploading your drawing.' },

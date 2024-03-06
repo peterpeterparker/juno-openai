@@ -40,8 +40,6 @@
 				}
 			});
 
-			alert("TODO: implement the process, locally!");
-
 			keyStore.set(key);
 		} catch (err: unknown) {
 			toasts.error({

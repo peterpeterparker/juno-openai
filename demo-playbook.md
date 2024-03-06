@@ -1,12 +1,8 @@
-1. Run locally
+1. `juno dev start`
 
-2. Remove alert `TODO: implement the process, locally!`
+2. In `vite.config.ts` set `container: true`
 
-3. `juno dev start`
-
-4. In `vite.config.ts` set `container: true`
-
-5. Config local
+3. Config local
 
 ```typescript
 import { defineDevConfig } from '@junobuild/config';
@@ -46,35 +42,16 @@ export default defineDevConfig(() => ({
 }));
 ```
 
-6. `juno dev eject`
+4. `juno dev eject`
 
-7. Implement `ic_cdk::print("Hello World 👋");`
+5. Implement `ic_cdk::print("Hello World 👋");`
 
-8. Implement HTTP outcalls
+6. Implement HTTP outcalls
 
-9. Upgrade mainnet `juno upgrade -t s -s target/deploy/satellite.wasm.gz`
-
-10. Implement uploadBlob
-
-> TODO: find and replace STEP_10_UPLOAD_BLOB
- 
-```typescript
-const { fullPath } = await uploadBlob({
-    data: blob,
-    collection: 'sketches',
-    filename: `${nanoid()}.png`,
-    token: `${nanoid()}`
-});
-
-keyStore.set(fullPath);
-```
-
-11. Implement HTTP outcalls
-
-12. Upgrade mainnet `juno upgrade -t s -s target/deploy/satellite.wasm.gz`
+7. Upgrade mainnet `juno upgrade -t s -s target/deploy/satellite.wasm.gz`
 
 Go further:
 
-13. Implement Analytics
+8. Implement Analytics
 
-14. Show GitHub Actions
+9. Show GitHub Actions 
