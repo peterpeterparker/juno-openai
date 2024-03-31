@@ -11,14 +11,8 @@ use crate::response::{
 };
 use ic_cdk::api::management_canister::http_request::http_request as http_request_outcall;
 use ic_cdk::{id, print};
-use junobuild_macros::{
-    on_delete_asset, on_delete_doc, on_delete_many_assets, on_delete_many_docs, on_set_doc,
-    on_set_many_docs, on_upload_asset,
-};
-use junobuild_satellite::{
-    include_satellite, OnDeleteAssetContext, OnDeleteDocContext, OnDeleteManyAssetsContext,
-    OnDeleteManyDocsContext, OnSetDocContext, OnSetManyDocsContext, OnUploadAssetContext,
-};
+use junobuild_macros::{on_set_doc, on_upload_asset};
+use junobuild_satellite::{include_satellite, OnSetDocContext, OnUploadAssetContext};
 use junobuild_utils::decode_doc_data;
 
 #[on_set_doc(collections = ["prompts"])]
@@ -54,21 +48,6 @@ async fn on_set_doc(context: OnSetDocContext) -> Result<(), String> {
         }
     }
 
-    Ok(())
-}
-
-#[on_set_many_docs]
-async fn on_set_many_docs(_context: OnSetManyDocsContext) -> Result<(), String> {
-    Ok(())
-}
-
-#[on_delete_doc]
-async fn on_delete_doc(_context: OnDeleteDocContext) -> Result<(), String> {
-    Ok(())
-}
-
-#[on_delete_many_docs]
-async fn on_delete_many_docs(_context: OnDeleteManyDocsContext) -> Result<(), String> {
     Ok(())
 }
 
@@ -112,16 +91,6 @@ async fn on_upload_asset(context: OnUploadAssetContext) -> Result<(), String> {
         }
     }
 
-    Ok(())
-}
-
-#[on_delete_asset]
-async fn on_delete_asset(_context: OnDeleteAssetContext) -> Result<(), String> {
-    Ok(())
-}
-
-#[on_delete_many_assets]
-async fn on_delete_many_assets(_context: OnDeleteManyAssetsContext) -> Result<(), String> {
     Ok(())
 }
 
