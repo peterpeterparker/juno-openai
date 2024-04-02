@@ -10,9 +10,9 @@ use crate::response::{
     read_response_image_generation, read_response_vision_preview, DrawingResult,
 };
 use ic_cdk::api::management_canister::http_request::http_request as http_request_outcall;
-use ic_cdk::{id, print};
+use ic_cdk::{id};
 use junobuild_macros::{on_set_doc, on_upload_asset};
-use junobuild_satellite::{include_satellite, OnSetDocContext, OnUploadAssetContext};
+use junobuild_satellite::{include_satellite, OnSetDocContext, OnUploadAssetContext, error, log};
 use junobuild_utils::decode_doc_data;
 
 #[on_set_doc(collections = ["prompts"])]
@@ -21,22 +21,22 @@ async fn on_set_doc(context: OnSetDocContext) -> Result<(), String> {
 
     let request = get_request_image_generation(&context.data.key, &data.prompt)?;
 
-    print("🔫 ---------> Starting the request.");
+    log(format!("🔫 ---------> Starting the request. {}", data.prompt))?;
 
     match http_request_outcall(request, 25_000_000_000).await {
         Ok((response,)) => {
-            print("✅ ---------> Request processed.");
+            log("✅ ---------> Request processed.".to_string())?;
 
             let result = read_response_image_generation(response)?;
 
             save_to_store(context.caller, context.data.key, result)?;
 
-            print("👍 ---------> All good.");
+            log("👍 ---------> All good.".to_string())?;
         }
         Err((r, m)) => {
             let message = format!("HTTP request error. RejectionCode: {:?}, Error: {}", r, m);
 
-            print(format!("‼️ ---------> {}.", message));
+            error(format!("‼️ ---------> {}.", message))?;
 
             save_to_store(
                 context.caller,
@@ -66,22 +66,22 @@ async fn on_upload_asset(context: OnUploadAssetContext) -> Result<(), String> {
 
     let request = get_request_vision_preview(&context.data.key.name, &download_url)?;
 
-    print("🔫 ---------> Starting the request.");
+    log("🔫 ---------> Starting the request.".to_string())?;
 
     match http_request_outcall(request, 25_000_000_000).await {
         Ok((response,)) => {
-            print("✅ ---------> Request processed.");
+            log("✅ ---------> Request processed.".to_string())?;
 
             let result = read_response_vision_preview(response)?;
 
             save_to_store(context.caller, doc_key, result)?;
 
-            print("👍 ---------> All good.");
+            log("👍 ---------> All good.".to_string())?;
         }
         Err((r, m)) => {
             let message = format!("HTTP request error. RejectionCode: {:?}, Error: {}", r, m);
 
-            print(format!("‼️ ---------> {}.", message));
+            error(format!("‼️ ---------> {}.", message))?;
 
             save_to_store(
                 context.caller,
